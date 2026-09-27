@@ -3,30 +3,17 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-23.05";
-
-    # The name "snowfall-lib" is required due to how Snowfall Lib processes your
-    # flake's inputs.
-    snowfall-lib = {
-      url = "github:snowfallorg/lib";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
   };
 
-  # We will handle this in the next section.
-  outputs = inputs: inputs.snowfall-lib.mkFlake {
-    inherit inputs;
-
-    src = ./.;
-
-    alias.packages.default = "apple-fonts";
-
-    snowfall = {
-      namespace = "plusultra";
-
-      meta = {
-        name = "nix-apple-fonts";
-        title = "Nix Apple Fonts";
-      };
+  outputs = { nixpkgs, ... }:
+    let
+      systems = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+      forAllSystems = f: nixpkgs.lib.genAttrs systems (system: f nixpkgs.legacyPackages.${system});
+    in
+    {
+      packages = forAllSystems (pkgs: rec {
+        apple-fonts = pkgs.callPackage ./packages/apple-fonts/default.nix { };
+        default = apple-fonts;
+      });
     };
-  };
 }

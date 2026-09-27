@@ -1,4 +1,4 @@
-{ lib, inputs, pkgs, stdenvNoCC, xorg }:
+{ lib, stdenvNoCC, mkfontdir, mkfontscale }:
 stdenvNoCC.mkDerivation {
   pname = "apple-fonts";
   version = "1.0";
@@ -7,7 +7,7 @@ stdenvNoCC.mkDerivation {
   dontUnpack = true;
   src = ./.;
 
-  nativeBuildInputs = [ xorg.mkfontscale ];
+  nativeBuildInputs = [ mkfontscale mkfontdir ];
 
   # read install --help to find -Dm644 meaning
   installPhase = ''
