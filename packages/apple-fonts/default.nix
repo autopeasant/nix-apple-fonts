@@ -12,11 +12,11 @@ stdenvNoCC.mkDerivation {
   # read install --help to find -Dm644 meaning
   installPhase = ''
     runHook preInstall
-    mkdir -p $out/usr/share/fonts/opentype
+    mkdir -p $out/share/fonts/opentype
     for folder in $src/fonts/*; do
-        install -Dm644 "$folder"/*.otf -t $out/usr/share/fonts/opentype
+        install -Dm644 "$folder"/*.otf -t $out/share/fonts/opentype
     done
-    mkfontdir "$out/usr/share/fonts/opentype"
+    mkfontdir "$out/share/fonts/opentype"
     runHook postInstall
   '';
 
